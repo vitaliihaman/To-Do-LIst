@@ -1,0 +1,69 @@
+html{
+    width: 100%;
+    height: 100%;
+}
+
+#wrapper {
+    background-color: aliceblue;
+    border: 1px solid blue;
+    width: 300px;
+    height: 500px;
+    position: relative;
+    margin: 10px auto;
+}
+
+.header{
+    background-color: bisque;
+    border-bottom: 1px solid blue;
+    padding: 5px;
+    margin: 0 0;
+}
+
+#h2{
+    display: inline-block;
+    font-family: Verdana, sans-serif;
+    margin: 15px 10px 10px 10px;
+}
+
+#add{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    margin: 0 0;
+}
+
+#add:hover{
+    transform: scale(1.2);
+}
+
+.inputField{
+    margin: 0;
+    position: relative;
+    width: 98%;
+    height: 30px;
+    font: 18px Verdana;
+}
+
+.buttonRemove{
+    position: absolute;
+    top: 4px;
+    right: 38px;
+}
+
+.buttonRemove:hover{
+    transform: scale(1.2);
+}
+
+.buttonCompleted{
+    position: absolute;
+    top: 4px;
+    right: 65px;
+}
+
+.buttonCompleted:hover{
+    transform: scale(1.2);
+}
+
+.completed{
+    text-decoration: line-through;
+}
