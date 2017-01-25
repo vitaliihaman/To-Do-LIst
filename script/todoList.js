@@ -1,83 +1,150 @@
-(function () {
-    document.addEventListener('DOMContentLoaded', function () {
+  (function () {
 
-        var input = document.getElementById('input');
+    var input = document.getElementById('input'),
+        addButton = document.getElementById('add'),
+        items = [];
 
-        proposition();
-        setListener();
+      addButton.addEventListener('click', add);
 
-        function proposition() {
-            input.value = 'Add What TODO';
+      input.addEventListener('keypress', function (e) {
+          if (e.keyCode === 13 && e.currentTarget.value) {
+              add();
+          }
+      });
+
+    function initialize() {
+        if (window.localStorage) {
+            items = JSON.parse(localStorage.getItem('todo')) || items;
+            updateHtml(items);
         }
+        //только тот код который выполняется один раз
+    }
 
-        function clearInput(){
-                input.value = '';
-        }
+    function updateHtml(items) {
+        if (items.length){
+            console.log(items);
+            var ul = document.getElementById('my-todo');
+                items = items.forEach(function(item, i){
+                var li = document.createElement('li');
 
-        function addButtonComplete(li){
-           var  buttonCompleted = document.createElement('INPUT');
-                buttonCompleted.className = 'buttonCompleted';
-            buttonCompleted.setAttribute('type', 'image');
-            buttonCompleted.setAttribute('src', 'image/tick.png');
-            buttonCompleted.setAttribute('width', '20px');
-            buttonCompleted.setAttribute('height', '20px');
-            li.appendChild(buttonCompleted);
-        }
+                li.innerHTML = item.title;
 
-        function addButtonRemove(li){
-            var buttonRemove = document.createElement('INPUT');
-                buttonRemove.className ='buttonRemove';
-            buttonRemove.setAttribute('type', 'image');
-            buttonRemove.setAttribute('src', 'image/delete.png');
-            buttonRemove.setAttribute('width', '20px');
-            buttonRemove.setAttribute('height', '20px');
-            li.appendChild(buttonRemove);
-        }
-
-        function add(){
-            if(input.value !== "" && input.value !== "Add What TODO") {
-                var ul = document.createElement('UL'),
-                    li = document.createElement('LI'),
-                    wrapper = document.getElementById('wrapper');
-                ul.className = 'inputField';
-                ul.setAttribute('id', 'ul');
-                text = document.createTextNode(input.value);
-                wrapper.appendChild(ul);
-                ul.appendChild(li);
-                li.appendChild(text);
                 addButtonComplete(li);
                 addButtonRemove(li);
-                clearInput();
-            }
+                li.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('funcBtn')) {
+                        var operation = e.target.getAttribute('data-target');
+                        if (operation === 'complete') {
+                            complete(e.target);
+                        }  else {
+                            remove(e.target);
+                        }
+                    }                    
+                });
+
+                ul.appendChild(li);
+            });
         }
+    }
 
-        function removeLi(){
+    function addButtonComplete(li){
+        var  buttonCompleted = document.createElement('input');
+        buttonCompleted.className = 'funcBtn';
+        buttonCompleted.setAttribute('data-target', 'complete');
+        buttonCompleted.setAttribute('type', 'image');
+        buttonCompleted.setAttribute('src', 'image/tick.png');
+        buttonCompleted.setAttribute('width', '20px');
+        buttonCompleted.setAttribute('height', '20px');
 
-            console.log('aaa');
+        li.appendChild(buttonCompleted);
+    }
+
+    function addButtonRemove(li){
+        var buttonRemove = document.createElement('input');
+        buttonRemove.className ='funcBtn';
+        buttonRemove.setAttribute('type', 'image');
+        buttonRemove.setAttribute('src', 'image/delete.png');
+        buttonRemove.setAttribute('width', '20px');
+        buttonRemove.setAttribute('height', '20px');
+
+        li.appendChild(buttonRemove);
+    }
+
+    function test (){
+        var buttonRemove = document.createElement('input');
+        buttonRemove.className ='funcBtn';
+        buttonCompleted.setAttribute('type', 'image');
+        buttonCompleted.setAttribute('src', 'image/delete.png');
+        buttonCompleted.setAttribute('width', '20px');
+        buttonCompleted.setAttribute('height', '20px');
+
+        body.appendChild(buttonRemove);
+    }
+
+    function add(){
+        if(input.value) {
+            var ul = document.getElementById('my-todo'),
+                li = document.createElement('LI');
+
+            li.innerHTML = input.value;
+
+            li.addEventListener('click', function(e) {
+                if (e.target.classList.contains('funcBtn')) {
+                    var operation = e.target.getAttribute('data-target');
+                    if (operation === 'complete') {
+                        complete(e.target);
+                    }  else {
+                        remove(e.target);
+                    }
+                }                    
+            });   
+
+            ul.appendChild(li);
+            input.value = '';
+
+            addButtonComplete(li);
+            addButtonRemove(li);
         }
+    }
 
-        function setListener(){
-            var addButton = document.getElementById('add'),
-                buttonsCompleted = document.getElementsByClassName('buttonCompleted'),
-                button,
-                buttonsRemove = document.getElementsByClassName('buttonRemove');
+    function complete(el) {
+        var liElement = el.parentNode;
+        liElement.classList.add('completed');
+    }
 
-            for (var i = 0; i < buttonsCompleted.length; i++) {
-                button = buttonsCompleted[i];
-                console.log(buttonsCompleted[i]);
-                console.log(i);
-                button.addEventListener('click', removeLi);
-            }
+    function remove(el) {
+        var liElement = el.parentNode,
+            ul =  liElement.parentNode;
 
-                addButton.addEventListener('click', add);
-                input.addEventListener('click' , clearInput);
+        ul.removeChild(liElement);
+    }
 
-        }
-
-
-
-
-
-
-    });
+    initialize();
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
